@@ -17,7 +17,7 @@ import MessageUI
 
 @available(iOS 13.0, *)
 class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableViewDelegate, UITableViewDataSource {
- 
+    
     var profileHeader: FUIProfileHeader!
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     @IBOutlet weak var myTableView: UITableView!
@@ -25,7 +25,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     let version = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.appVersionKey)
     let build = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.buildKey)
     let environment = "Development"
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setTableView()
@@ -33,14 +33,14 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return 5
-     }
+        return 5
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.row {
         case 0:
@@ -53,14 +53,14 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
             return keyValueCell
             
         case 1:
-        let keyValueCell = tableView.dequeueReusableCell(withIdentifier: FUIKeyValueFormCell.reuseIdentifier, for: indexPath) as! FUIKeyValueFormCell
-        keyValueCell.keyName = "Build"
-        keyValueCell.selectionStyle = .none
-        keyValueCell.isUserInteractionEnabled = false
-        keyValueCell.value = build!
-        keyValueCell.maxNumberOfLines = 1
-        return keyValueCell
-                
+            let keyValueCell = tableView.dequeueReusableCell(withIdentifier: FUIKeyValueFormCell.reuseIdentifier, for: indexPath) as! FUIKeyValueFormCell
+            keyValueCell.keyName = "Build"
+            keyValueCell.selectionStyle = .none
+            keyValueCell.isUserInteractionEnabled = false
+            keyValueCell.value = build!
+            keyValueCell.maxNumberOfLines = 1
+            return keyValueCell
+            
         case 2:
             let keyValueCell = tableView.dequeueReusableCell(withIdentifier: FUIKeyValueFormCell.reuseIdentifier, for: indexPath) as! FUIKeyValueFormCell
             keyValueCell.keyName = "Environment"
@@ -81,21 +81,21 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
             return titleCell
             
         case 4:
-           let titleCell = tableView.dequeueReusableCell(withIdentifier: FUITitleFormCell.reuseIdentifier, for: indexPath) as! FUITitleFormCell
+            let titleCell = tableView.dequeueReusableCell(withIdentifier: FUITitleFormCell.reuseIdentifier, for: indexPath) as! FUITitleFormCell
             titleCell.selectionStyle = .blue
             titleCell.value = "       Logout"
-           titleCell.imageView?.image = UIImage(named: "exit")
+            titleCell.imageView?.image = UIImage(named: "exit")
             titleCell.isEditable = false
             return titleCell
         default:
             return UITableViewCell()
         }
-     }
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 3:
-           self.sendEmail()
+            self.sendEmail()
         case 4:
             self.logout()
         default:
@@ -129,23 +129,23 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         logoutRequest.httpMethod = SAPURLSession.HTTPMethod.post
         
         sapURLSession?.dataTask(with: logoutRequest){data, response, error in
-        if error == nil {
-            print("eccomiiiii")
-            DispatchQueue.main.async {
-            UIApplication.shared.applicationIconBadgeNumber = 0
-            UserDefaults.standard.removeObject(forKey: "USER")
-            UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
-            UserDefaults.standard.removeObject(forKey: "EMAIL")
-            UserDefaults.standard.removeObject(forKey: "approvedcount")
-            UserDefaults.standard.removeObject(forKey: "rejectedcount")
-            UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
-            UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
-            UserDefaults.standard.synchronize()
-            self.appDelegate.closeOfflineStore()
-            URLCache.shared.removeAllCachedResponses()
-            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-            OnboardingManager.shared.onboardOrRestore()
-                    }
+            if error == nil {
+                print("eccomiiiii")
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    UserDefaults.standard.removeObject(forKey: "USER")
+                    UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
+                    UserDefaults.standard.removeObject(forKey: "EMAIL")
+                    UserDefaults.standard.removeObject(forKey: "approvedcount")
+                    UserDefaults.standard.removeObject(forKey: "rejectedcount")
+                    UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
+                    UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
+                    UserDefaults.standard.synchronize()
+                    self.appDelegate.closeOfflineStore()
+                    URLCache.shared.removeAllCachedResponses()
+                    HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+                    OnboardingManager.shared.onboardOrRestore()
+                }
             }
         }.resume()
     }
@@ -179,14 +179,14 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     }
     
     func setupProfileHeader() {
-           // Profile Header
-           profileHeader = FUIProfileHeader()
+        // Profile Header
+        profileHeader = FUIProfileHeader()
         profileHeader.imageView.image = UIImage(named: "profile")
         
         profileHeader.headlineText = UserDefaults.standard.string(forKey: "NAMESURNAME")!
         profileHeader.subheadlineText = UserDefaults.standard.string(forKey: "USER")!
         profileHeader.descriptionText = (UserDefaults.standard.string(forKey: "EMAIL") ?? "")
-       }
-
-
+    }
+    
+    
 }

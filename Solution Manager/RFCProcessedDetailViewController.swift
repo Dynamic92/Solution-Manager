@@ -14,7 +14,7 @@ import SAPOfflineOData
 
 class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoadingIndicator, UICollectionViewDelegateFlowLayout {
     
-   // @IBOutlet weak var collectionView: UICollectionView!
+    // @IBOutlet weak var collectionView: UICollectionView!
     let autosizingColumnFlow = FUIStandardAutoSizingColumnFlowLayout()
     var rowsNumberSection0 = 5
     var rowsNumberSection1 = 5
@@ -129,22 +129,22 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.section==0) {
-        switch indexPath.row {
-        case 0:
-            return self.cellForObjectID(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.objectID)
-        case 1:
-            return self.cellForDescription(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.description)
-        case 2:
-            return self.cellForSoldToParty(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.soldToParty)
-        case 3:
-            return self.cellForRequester(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.requester)
-        case 4:
-            return self.cellForStatus(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.status)
-        default:
-            return UITableViewCell()
+            switch indexPath.row {
+            case 0:
+                return self.cellForObjectID(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.objectID)
+            case 1:
+                return self.cellForDescription(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.description)
+            case 2:
+                return self.cellForSoldToParty(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.soldToParty)
+            case 3:
+                return self.cellForRequester(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.requester)
+            case 4:
+                return self.cellForStatus(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.status)
+            default:
+                return UITableViewCell()
             }
         }
-            if (indexPath.section==1) {
+        if (indexPath.section==1) {
             switch indexPath.row {
             case 0:
                 self.setRequestForChange(self.entity)
@@ -165,37 +165,37 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
             switch indexPath.row {
             case 0:
                 return self.cellForCreatedAt(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.createdAt)
-               
+                
             case 1:
                 return self.cellForRequestedStart(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.requestedStart)
             case 2:
-               return self.cellForRequestedEnd(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.requestedEnd)
+                return self.cellForRequestedEnd(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.requestedEnd)
             case 3:
                 return self.cellForDueBy(tableView: tableView, indexPath: indexPath, currentEntity: self.entity, property: RfCQueryService.dueBy)
             default:
                 return UITableViewCell()
             }
         }
-          /*  else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentTableViewCell
-                cell.collectionView!.collectionViewLayout = autosizingColumnFlow
-                // Be aware of recommended margins in compact (left 16) and regular (left 48) mode
-                // collectionView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-                
-                cell.collectionView!.register(FUIItemCollectionViewCell.self,
-                                              forCellWithReuseIdentifier:
-                    FUIItemCollectionViewCell.reuseIdentifier)
-                cell.collectionView!.dataSource = self
-                cell.collectionView!.delegate = self
-                
-                return cell
-        }
- */
+        /*  else {
+         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentTableViewCell
+         cell.collectionView!.collectionViewLayout = autosizingColumnFlow
+         // Be aware of recommended margins in compact (left 16) and regular (left 48) mode
+         // collectionView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+         
+         cell.collectionView!.register(FUIItemCollectionViewCell.self,
+         forCellWithReuseIdentifier:
+         FUIItemCollectionViewCell.reuseIdentifier)
+         cell.collectionView!.dataSource = self
+         cell.collectionView!.delegate = self
+         
+         return cell
+         }
+         */
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         if (section == 2){
-          return 0
+            return 0
         }
         return 20
     }
@@ -206,7 +206,7 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let myView = UIView()
-    
+        
         return myView
     }
     
@@ -256,23 +256,23 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
         expandableButton.addTarget(self, action: #selector(handleExpandeClose), for: .touchUpInside)
         expandableButton.tag = section
         if (section == 0){
-        expandableButton.setTitle("   General Data (5)  ▲", for: .normal)
-        return expandableButton
+            expandableButton.setTitle("   General Data (5)  ▲", for: .normal)
+            return expandableButton
         }
         if (section == 1) {
-        expandableButton.setTitle("   Ferrero Request (5)  ▲", for: .normal)
-        return expandableButton
+            expandableButton.setTitle("   Ferrero Request (5)  ▲", for: .normal)
+            return expandableButton
         }
         if (section == 2) {
-        expandableButton.setTitle("   Dates (4)  ▼", for: .normal)
-        return expandableButton
+            expandableButton.setTitle("   Dates (4)  ▼", for: .normal)
+            return expandableButton
         }
         let myView = UIView()
         return myView
     }
     
     @objc func handleExpandeClose(button: UIButton){
-       
+        
         if (button.tag==0){
             var indexPaths = [IndexPath]()
             for x in 0..<5 {
@@ -288,7 +288,7 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
             }
             else {
                 rowsNumberSection0 = 5
-               button.setTitle("   General Data (5)  ▲", for: .normal)
+                button.setTitle("   General Data (5)  ▲", for: .normal)
                 tableView.beginUpdates()
                 tableView.insertRows(at: indexPaths, with: .fade)
                 tableView.endUpdates()
@@ -317,7 +317,7 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
             }
         }
         if (button.tag==2){
-           var indexPaths = [IndexPath]()
+            var indexPaths = [IndexPath]()
             for x in 0..<4 {
                 let indexPath = IndexPath(row: x, section: 2)
                 indexPaths.append(indexPath)
@@ -347,11 +347,11 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
     }
     
     /*override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (self.entity.changeManager!.isEmpty){
-            return 0
-        }
-        return 40
-    }*/
+     if (self.entity.changeManager!.isEmpty){
+     return 0
+     }
+     return 40
+     }*/
     
     func setRequestForChange(_ requestForChange: RfCQueryService) {
         
@@ -409,9 +409,9 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
     private func cellForStatus(tableView: UITableView, indexPath: IndexPath, currentEntity: RfCQueryService, property: Property) -> UITableViewCell {
         var value = ""
         if (self.entity.status!.contains("E0003")) {
-           value = "Rejected"
+            value = "Rejected"
         }
-            
+        
         if (self.entity.status!.contains("E0004")) {
             value = "Approved"
         }
@@ -890,48 +890,48 @@ extension RFCProcessedDetailViewController: EntityUpdaterDelegate {
 }
 
 /*extension RFCProcessedDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection
-        section: Int) -> Int {
-        return 4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt
-        indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let itemCell = collectionView.dequeueReusableCell(withReuseIdentifier:
-            FUIItemCollectionViewCell.reuseIdentifier,
-                                                          for: indexPath) as! FUIItemCollectionViewCell
-        
-        //let product = products[indexPath.row]
-        
-        itemCell.detailImageView.image = UIImage(named: "wordIcon")
-        itemCell.title.text = "Attach.doc"
-
-        
-        return itemCell
-    }
-    
-    /*func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        ret
-    }
-    */
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Attachments"
-    }
  
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDocument"{
-            let navController = segue.destination as! UINavigationController
-            let documentViewController = navController.viewControllers[0] as! DocumentViewController
-            documentViewController.navigationItem.leftItemsSupplementBackButton = true
-            let cancelButton = UIBarButtonItem(title: NSLocalizedString("keyCancelButtonToGoPreviousScreen", value: "Back", comment: "XBUT: Title of Cancel button."), style: .plain, target: documentViewController, action: #selector(documentViewController.cancel))
-            documentViewController.navigationItem.leftBarButtonItem = cancelButton
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showDocument", sender: nil)
-    }
-}
-*/
+ func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection
+ section: Int) -> Int {
+ return 4
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView, cellForItemAt
+ indexPath: IndexPath) -> UICollectionViewCell {
+ 
+ let itemCell = collectionView.dequeueReusableCell(withReuseIdentifier:
+ FUIItemCollectionViewCell.reuseIdentifier,
+ for: indexPath) as! FUIItemCollectionViewCell
+ 
+ //let product = products[indexPath.row]
+ 
+ itemCell.detailImageView.image = UIImage(named: "wordIcon")
+ itemCell.title.text = "Attach.doc"
+ 
+ 
+ return itemCell
+ }
+ 
+ /*func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+ ret
+ }
+ */
+ override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+ return "Attachments"
+ }
+ 
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+ if segue.identifier == "showDocument"{
+ let navController = segue.destination as! UINavigationController
+ let documentViewController = navController.viewControllers[0] as! DocumentViewController
+ documentViewController.navigationItem.leftItemsSupplementBackButton = true
+ let cancelButton = UIBarButtonItem(title: NSLocalizedString("keyCancelButtonToGoPreviousScreen", value: "Back", comment: "XBUT: Title of Cancel button."), style: .plain, target: documentViewController, action: #selector(documentViewController.cancel))
+ documentViewController.navigationItem.leftBarButtonItem = cancelButton
+ }
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+ performSegue(withIdentifier: "showDocument", sender: nil)
+ }
+ }
+ */

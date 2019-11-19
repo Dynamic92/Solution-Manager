@@ -43,13 +43,13 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
         self.setRefreshControl()
         self.setTableLayout()
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "load"), object: nil)
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.clearsSelectionOnViewWillAppear = false
-    self.navigationController?.navigationBar.topItem?.title="Request for Change"
+        self.navigationController?.navigationBar.topItem?.title="Request for Change"
         self.tabBarController?.tabBar.isHidden = false
         tabBarController?.tabBar.items?[1].badgeValue = String(self.rfcApproved.count + self.rfcRejected.count)
         self.refresh()
@@ -61,7 +61,7 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
     }
     
     @objc func hamburgerBtnAction(_ sender: UIBarButtonItem) {
-      HamburgerMenu().triggerSideMenu()
+        HamburgerMenu().triggerSideMenu()
     }
     
     @objc func hideHamburger(){
@@ -69,7 +69,7 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
     }
     
     // MARK: - Table view data source
-   private func setKPIHeader() {
+    private func setKPIHeader() {
         let kpiHeader = FUIKPIHeader()
         var kpiItems = [FUIKPIContainer]()
         for index in 0...2 {
@@ -105,10 +105,10 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
         UserDefaults.standard.synchronize()
         tabBarController?.tabBar.items?[0].badgeValue = String(self.rfcToBeApproved.count)
         if (self.rfcToBeApproved.count == 0) {
-        tabBarController?.tabBar.items?[1].badgeValue = String(self.rfcApproved.count + self.rfcRejected.count)
+            tabBarController?.tabBar.items?[1].badgeValue = String(self.rfcApproved.count + self.rfcRejected.count)
         }
     }
-
+    
     
     private func buildKPIView(items: [FUIKPIViewItem], captionLabelText: String = "", captionLabelLines: Int = 0, colorScheme: FUIBackgroundColorScheme = .light, isEnabled: Bool = true) -> FUIKPIView {
         let kpiView = FUIKPIView()
@@ -150,18 +150,18 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
     
     func cancelLocalChanges(){
         DispatchQueue.global().async {
-        for entity in self.rfcApproved{
-            do{
-                try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
+            for entity in self.rfcApproved{
+                do{
+                    try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
+                }
+                catch{
+                    print(error)
+                }
             }
-            catch{
-                print(error)
-            }
-        }
-        for entity in self.rfcRejected{
-            do{
-                try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
-            }
+            for entity in self.rfcRejected{
+                do{
+                    try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
+                }
                 catch{
                     print(error)
                 }
@@ -170,11 +170,11 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
     }
     
     @objc func updateData() {
-       if (ConnectivityUtils.isConnected()){
-        self.cancelLocalChanges()
-        self.appDelegate.openOfflineStore(onboarding: false, isBackground: true)
+        if (ConnectivityUtils.isConnected()){
+            self.cancelLocalChanges()
+            self.appDelegate.openOfflineStore(onboarding: false, isBackground: true)
         }
-       else{
+        else{
             self.refreshControl?.endRefreshing()
         }
     }
@@ -220,11 +220,11 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
         cell.subheadlineText = "Requester: " + rfcqueryservice.createdBy!
         cell.footnoteText = "Object ID: " + rfcqueryservice.objectID!
         /*if (today! < createdAt!){
-        cell.statusImage = UIImage(named: "new")
-        cell.substatusText = "Pending"
-        }
-        else{*/
-            cell.statusText = "Pending"
+         cell.statusImage = UIImage(named: "new")
+         cell.substatusText = "Pending"
+         }
+         else{*/
+        cell.statusText = "Pending"
         //}
         cell.substatusLabel.textColor = UIColor.preferredFioriColor(forStyle: .critical)
         cell.statusLabel.textColor = UIColor.preferredFioriColor(forStyle: .critical)
@@ -245,10 +245,10 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
         let query = DataQuery().from(serviceSet).withKey(RfCQueryService.key(objectID: selectedEntity.objectID!, processType: selectedEntity.processType!))
         detailViewController.query = query
         detailViewController.allowsEditableCells = false
-    detailViewController.navigationItem.leftItemsSupplementBackButton = true
+        detailViewController.navigationItem.leftItemsSupplementBackButton = true
         detailViewController.entitySetName = self.entitySetName
         self.tabBarController?.tabBar.isHidden = true
-    self.navigationController?.show(detailViewController, sender: nil)
+        self.navigationController?.show(detailViewController, sender: nil)
     }
     
     func fetchRfCQueryServiceSet(_ completionHandler: @escaping ([RfCQueryService]?, Error?) -> Void) {
@@ -334,7 +334,7 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
         view.titleLabel.text = "To be Approved - " + (UserDefaults.standard.string(forKey: "USER") ?? "")
         return view
     }
-
+    
     
     // MARK: - Table update
     
@@ -368,7 +368,7 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
                 alertController.addAction(UIAlertAction(title: self.okTitle, style: .default))
                 OperationQueue.main.addOperation({
                     // Present the alertController
-                   self.present(alertController, animated: true)
+                    self.present(alertController, animated: true)
                 })
                 self.logger.error("Could not update table. Error: \(error)", error: error)
                 return

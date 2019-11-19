@@ -48,7 +48,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            tabBarController?.tabBar.items?[0].badgeValue = String(UserDefaults.standard.integer(forKey: "tobeapprovedcount"))
+        tabBarController?.tabBar.items?[0].badgeValue = String(UserDefaults.standard.integer(forKey: "tobeapprovedcount"))
         self.tabBarController?.tabBar.isHidden = false
         self.initExampleData()
         self.setKPIHeader()
@@ -80,9 +80,9 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
     private func setSearchBar() {
         searchBarButtonItem = UIBarButtonItem(image: FUIIconLibrary.system.search.withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(showSearchBar))
         navigationItem.rightBarButtonItem = searchBarButtonItem
-       }
+    }
     
-     @objc func showSearchBar() {
+    @objc func showSearchBar() {
         isSearchBarOpen = true
         self.searchController.isActive = true
         searchController.obscuresBackgroundDuringPresentation = false
@@ -96,7 +96,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
             let searchBarContainer = SearchBarContainerView(customSearchBar:  self.searchController.searchBar)
             searchBarContainer.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44)
             self.navigationItem.titleView = searchBarContainer
-          }, completion: { finished in
+        }, completion: { finished in
             self.searchController.searchBar.becomeFirstResponder()
         })
         
@@ -113,7 +113,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
     }
     
     @objc func hideKeyboard() {
-      searchController.searchBar.endEditing(true)
+        searchController.searchBar.endEditing(true)
     }
     
     func closeSearchBar(){
@@ -121,8 +121,8 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
         self.searchController.searchBar.resignFirstResponder()
         isSearchBarOpen = false
         UIView.animate(withDuration: 0.4, animations: {
-          self.navigationItem.titleView = nil
-          }, completion: { finished in
+            self.navigationItem.titleView = nil
+        }, completion: { finished in
             self.searchController.isActive = false
         })
     }
@@ -134,7 +134,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
             tableView.reloadData()
             return
         }
-         currentEntities = self.entities.filter({ rfc -> Bool in
+        currentEntities = self.entities.filter({ rfc -> Bool in
             guard let text = searchBar.text else {return false}
             return (rfc.objectID!.contains(text) || rfc.description!.lowercased().contains(text.lowercased()) || rfc.soldToParty!.lowercased().contains(text.lowercased()) || rfc.landscape!.lowercased().contains(text.lowercased()) || rfc.processType!.lowercased().contains(text.lowercased()) || rfc.correction!.lowercased().contains(text.lowercased()) || rfc.requester!.lowercased().contains(text.lowercased()))
         })
@@ -162,18 +162,18 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
                                     isEnabled: true)
         kpiExampleData = [kpiView1, kpiView2, kpiView3]
         if (self.entities.count==0) {
-        tabBarController?.tabBar.items?[0].badgeValue = String(UserDefaults.standard.integer(forKey: "tobeapprovedcount"))
+            tabBarController?.tabBar.items?[0].badgeValue = String(UserDefaults.standard.integer(forKey: "tobeapprovedcount"))
         }
         tabBarController?.tabBar.items?[1].badgeValue = String(UserDefaults.standard.integer(forKey: "approvedcount") + UserDefaults.standard.integer(forKey: "rejectedcount"))
     }
     
     @objc func hamburgerBtnAction(_ sender: UIBarButtonItem) {
         HamburgerMenu().triggerSideMenu()
-      }
-      
-      @objc func hideHamburger(){
-          HamburgerMenu().closeSideMenu()
-      }
+    }
+    
+    @objc func hideHamburger(){
+        HamburgerMenu().closeSideMenu()
+    }
     
     
     private func buildKPIView(items: [FUIKPIViewItem], captionLabelText: String = "", captionLabelLines: Int = 0, colorScheme: FUIBackgroundColorScheme = .light, isEnabled: Bool = true) -> FUIKPIView {
@@ -221,28 +221,28 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
     }
     
     @objc func updateData() {
-       if (ConnectivityUtils.isConnected()){
+        if (ConnectivityUtils.isConnected()){
             self.cancelLocalChanges()
-        self.appDelegate.openOfflineStore(onboarding: false, isBackground: true)
+            self.appDelegate.openOfflineStore(onboarding: false, isBackground: true)
         }
         else{
             self.refreshControl?.endRefreshing()
         }
     }
-  
+    
     func cancelLocalChanges(){
         DispatchQueue.global().async {
-        for entity in self.entities{
-            do{
-                try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
-            }
-            catch{
-                print(error)
-            }
+            for entity in self.entities{
+                do{
+                    try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: entity)
+                }
+                catch{
+                    print(error)
+                }
             }
         }
     }
- 
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         let noDataLabel: UILabel     = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
         if (self.currentEntities.count == 0 && !(self.entities.count == 0))
@@ -290,8 +290,8 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
         cell.subheadlineText = "Requester: " + rfcqueryservice.createdBy!
         cell.footnoteText = "Object ID: " + rfcqueryservice.objectID!
         if ((rfcqueryservice.status?.contains("E0003"))!){
-        cell.statusText = "Rejected"
-        cell.statusLabel.textColor = UIColor.preferredFioriColor(forStyle: .negative)
+            cell.statusText = "Rejected"
+            cell.statusLabel.textColor = UIColor.preferredFioriColor(forStyle: .negative)
         }
         if ((rfcqueryservice.status?.contains("E0004"))!){
             cell.statusText = "Approved"
@@ -308,7 +308,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
         if (isSearchBarOpen){
             self.closeSearchBar()
         }
-
+        
         let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let detailViewController = mainStoryBoard.instantiateViewController(withIdentifier: "RfCProcessedDetailViewController") as! RFCProcessedDetailViewController
         let selectedEntity = self.currentEntities[indexPath.row]
@@ -319,7 +319,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
         detailViewController.allowsEditableCells = false
         detailViewController.navigationItem.leftItemsSupplementBackButton = true
         detailViewController.entitySetName = self.entitySetName
-      self.navigationController?.show(detailViewController, sender: nil)
+        self.navigationController?.show(detailViewController, sender: nil)
     }
     
     func fetchRfCQueryServiceSet(_ completionHandler: @escaping ([RfCQueryService]?, Error?) -> Void) {

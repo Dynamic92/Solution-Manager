@@ -80,8 +80,8 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         approveButton.setTitle("Approve", for: .normal)
         //approveButton.titleLabel?.preferredMaxLayoutWidth = 200
         //approveButton.isPreservingPreferredMaxLayoutWidth = true
-       approveButton.titleLabel?.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
-
+        approveButton.titleLabel?.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        
         approveButton.setTitleColor(UIColor.preferredFioriColor(forStyle: .primary6), for: .normal)
         approveButton.addTarget(self, action: #selector(self.approveRFC), for: .touchUpInside)
         rejectButton.backgroundColor = UIColor.preferredFioriColor(forStyle: .negative)
@@ -90,13 +90,13 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         rejectButton.setTitle("Reject", for: .normal)
         rejectButton.addTarget(self, action: #selector(self.rejectRFC), for: .touchUpInside)
     }
-
+    
     func executeQuery(_ queryInput: DataQuery, _ message: String, _ queryString: [String]){
         DispatchQueue.global().async {
             do{
                 if (ConnectivityUtils.isConnected()){
                     try
-                    self.appDelegate.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: queryInput)
+                        self.appDelegate.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: queryInput)
                 } else{
                     var queryArray = self.defaults.object(forKey: "QueryInputArray") as? [[String]]
                     if (queryArray != nil){
@@ -117,8 +117,8 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         
         do{
             if (message.contains("RFC has been approved.")){
-                    self.entity.status = "E0004"
-                }
+                self.entity.status = "E0004"
+            }
                 
             else{
                 self.entity.status = "E0003"
@@ -196,7 +196,7 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
     
     // MARK: - Table view data source
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.section==0) {
             switch indexPath.row {
             case 0:
@@ -254,21 +254,21 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         return 20
     }
     
-     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let myView = UIView()
         return myView
     }
     
     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return UITableView.automaticDimension
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
-     func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
     
-     func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (self.entity.changeManager!.isEmpty){
             return 0
         }
@@ -284,7 +284,7 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.preventNavigationLoop {
             return
         }
@@ -294,7 +294,7 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if (self.entity.changeManager!.isEmpty){
             return UIView()
         }
@@ -413,64 +413,64 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
     
     
     /*func createStackView(with layout: NSLayoutConstraint.Axis) -> UIStackView {
-        let stackView = UIStackView()
-        stackView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
-        stackView.axis = layout
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 0
-        return stackView
-    }
-    */
+     let stackView = UIStackView()
+     stackView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
+     stackView.axis = layout
+     stackView.distribution = .fillEqually
+     stackView.alignment = .fill
+     stackView.spacing = 0
+     return stackView
+     }
+     */
     @objc func approveRFC() {
         let approveSet = ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCApproveSet
         let keyApprove = RfCApprove.key(objectID: self.entity.objectID!, processType: self.entity.processType!, operationType: "A")
         let queryApprove = DataQuery().from(approveSet).withKey(keyApprove)
         let queryString = [self.entity.objectID, self.entity.processType, "A"] as! [String]
-            let alertController = UIAlertController(
-                title: "Confirm Approval",
-                message: "You cannot undo this step after approval.",
-                preferredStyle: UIAlertController.Style.alert
-            )
-            let confirmAction = UIAlertAction(
-            title: "Approve", style: UIAlertAction.Style.default) { (action) in
-                    print(queryApprove)
-                self.executeQuery(queryApprove, "RFC has been approved.", queryString)
-                    self.navigationController?.popViewController(animated: true)
-            }
-            let cancelAction = UIAlertAction(
-            title: "Cancel", style: UIAlertAction.Style.default) { (action) in
-                return
-            }
-            
+        let alertController = UIAlertController(
+            title: "Confirm Approval",
+            message: "You cannot undo this step after approval.",
+            preferredStyle: UIAlertController.Style.alert
+        )
+        let confirmAction = UIAlertAction(
+        title: "Approve", style: UIAlertAction.Style.default) { (action) in
+            print(queryApprove)
+            self.executeQuery(queryApprove, "RFC has been approved.", queryString)
+            self.navigationController?.popViewController(animated: true)
+        }
+        let cancelAction = UIAlertAction(
+        title: "Cancel", style: UIAlertAction.Style.default) { (action) in
+            return
+        }
+        
         confirmAction.setValue(UIColor.preferredFioriColor(forStyle: .positive), forKey: "titleTextColor")
-            alertController.addAction(cancelAction)
-            alertController.addAction(confirmAction)
-            self.present(alertController, animated: true, completion: nil)
+        alertController.addAction(cancelAction)
+        alertController.addAction(confirmAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @objc func rejectRFC() {
-         let approveSet = ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCApproveSet
+        let approveSet = ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCApproveSet
         let keyReject = RfCApprove.key(objectID: self.entity.objectID!, processType: self.entity.processType!, operationType: "R")
         let queryReject = DataQuery().from(approveSet).withKey(keyReject)
         let queryString = [self.entity.objectID, self.entity.processType, "R"] as! [String]
-            let alertController = UIAlertController(
-                title: "Confirm Reject",
-                message: "You cannot undo this step after rejection.",
-                preferredStyle: UIAlertController.Style.alert
-            )
-            let rejectAction = UIAlertAction(
-            title: "Reject", style: UIAlertAction.Style.destructive) { (action) in
-                self.executeQuery(queryReject, "RFC has been rejected.", queryString)
-                self.navigationController?.popViewController(animated: true)
-            }
-            let cancelAction = UIAlertAction(
-            title: "Cancel", style: UIAlertAction.Style.default) { (action) in
-                return
-            }
-            alertController.addAction(cancelAction)
-            alertController.addAction(rejectAction)
-            self.present(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(
+            title: "Confirm Reject",
+            message: "You cannot undo this step after rejection.",
+            preferredStyle: UIAlertController.Style.alert
+        )
+        let rejectAction = UIAlertAction(
+        title: "Reject", style: UIAlertAction.Style.destructive) { (action) in
+            self.executeQuery(queryReject, "RFC has been rejected.", queryString)
+            self.navigationController?.popViewController(animated: true)
+        }
+        let cancelAction = UIAlertAction(
+        title: "Cancel", style: UIAlertAction.Style.default) { (action) in
+            return
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(rejectAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - OData property specific cell creators
