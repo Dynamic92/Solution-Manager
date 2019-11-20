@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Set a FUIInfoViewController as the rootViewController, since there it is none set in the Main.storyboard
-        UIApplication.shared.setMinimumBackgroundFetchInterval(1800)
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         UIApplication.shared.registerForRemoteNotifications()
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.rootViewController = FUIInfoViewController.createSplashScreenInstanceFromStoryboard()
@@ -40,47 +40,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if (!ConnectivityUtils.isConnected()){
-            completionHandler(.noData)
-        }
-        else {
-            do{
-                self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
-                    self.zrequestforchangesrvEntities.download { error in
-                        if let error = error {
-                            self.logger.error("Offline Store download failed.", error: error)
-                            print("Offline Store download failed.")
-                        } else {
-                            self.logger.info("Offline Store is downloaded.")
-                            print("Offline Store is downloaded.")
-                        }
-                        self.setRootViewController(isBackground: false)
-                        completionHandler(.newData)
-                    }
-                }
+        self.zrequestforchangesrvEntities.download { error in
+            if let error = error {
+                self.logger.error("Offline Store download failed.", error: error)
+                print("Offline Store download failed.")
+                completionHandler(.noData)
+            } else {
+                self.logger.info("Offline Store is downloaded.")
+                print("Offline Store is downloaded.")
+                self.setRootViewController(isBackground: false)
+                completionHandler(.newData)
             }
         }
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if (!ConnectivityUtils.isConnected()){
-            completionHandler(.noData)
-        }
-        else {
-            do{
-                self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
-                    self.zrequestforchangesrvEntities.download { error in
-                        if let error = error {
-                            self.logger.error("Offline Store download failed.", error: error)
-                            print("Offline Store download failed.")
-                        } else {
-                            self.logger.info("Offline Store is downloaded.")
-                            print("Offline Store is downloaded.")
-                        }
-                        self.setRootViewController(isBackground: false)
-                        completionHandler(.newData)
-                    }
-                }
+        self.zrequestforchangesrvEntities.download { error in
+            if let error = error {
+                self.logger.error("Offline Store download failed.", error: error)
+                print("Offline Store download failed.")
+                completionHandler(.noData)
+            } else {
+                self.logger.info("Offline Store is downloaded.")
+                print("Offline Store is downloaded.")
+                self.setRootViewController(isBackground: false)
+                completionHandler(.newData)
             }
         }
     }
@@ -297,16 +281,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             return
         }
         print("passo 7")
-        DispatchQueue.global().async {
-            do{
-                try self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet))
-            }
-                
-            catch{
-                print("error")
-            }
-        }
-        
         // the download function updates the client’s offline store from the backend.
         self.zrequestforchangesrvEntities.download { error in
             if let error = error {
@@ -314,7 +288,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 print("Offline Store download failed.")
                 if (ConnectivityUtils.isConnected()){
                     DispatchQueue.main.async {
-                        FUIToastMessage.show(message: "Offline Store download failed:\nInternal server error.",icon: FUIIconLibrary.indicator.veryHighPriority,withDuration: 2.5, maxNumberOfLines: 15)
+                        FUIToastMessage.show(message: "Offline Store download failed:\nInternal server error.",icon: FUIIconLibrary.indicator.veryHighPriority,withDuration: 2.5, maxNumberOfLines: 3)
                     }
                 }
                 
@@ -345,6 +319,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             print("Offline Store is uploaded.")
         }
         print("passo 6")
+    }
+    
+    func avoid401Error(){
+        DispatchQueue.global().async {
+            do{
+                try self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet))
+            }
+                
+            catch{
+                print("error")
+            }
+        }
     }
     
     
