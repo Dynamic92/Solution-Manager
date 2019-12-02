@@ -12,6 +12,7 @@ import SAPFoundation
 import SAPOData
 import SAPOfflineOData
 import UserNotifications
+import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, OnboardingManagerDelegate, ConnectivityObserver, UNUserNotificationCenterDelegate {
@@ -25,6 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Set a FUIInfoViewController as the rootViewController, since there it is none set in the Main.storyboard
+        
+        if #available(iOS 13.0, *) {
+            registerBackgroundTaks()
+        }
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         UIApplication.shared.registerForRemoteNotifications()
         self.window = UIWindow(frame: UIScreen.main.bounds)
@@ -40,33 +45,84 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        self.zrequestforchangesrvEntities.download { error in
-            if let error = error {
-                self.logger.error("Offline Store download failed.", error: error)
-                print("Offline Store download failed.")
-                completionHandler(.noData)
-            } else {
-                self.logger.info("Offline Store is downloaded.")
-                print("Offline Store is downloaded.")
-                self.setRootViewController(isBackground: false)
-                completionHandler(.newData)
+        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+            self.zrequestforchangesrvEntities.download { error in
+                if let error = error {
+                    self.logger.error("Offline Store download failed.", error: error)
+                    print("Offline Store download failed.")
+                    completionHandler(.noData)
+                } else {
+                    self.logger.info("Offline Store is downloaded.")
+                    print("Offline Store is downloaded.")
+                    self.setRootViewController(isBackground: false)
+                    completionHandler(.newData)
+                }
             }
         }
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        self.zrequestforchangesrvEntities.download { error in
-            if let error = error {
-                self.logger.error("Offline Store download failed.", error: error)
-                print("Offline Store download failed.")
-                completionHandler(.noData)
-            } else {
-                self.logger.info("Offline Store is downloaded.")
-                print("Offline Store is downloaded.")
-                self.setRootViewController(isBackground: false)
-                completionHandler(.newData)
+        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+            self.zrequestforchangesrvEntities.download { error in
+                if let error = error {
+                    self.logger.error("Offline Store download failed.", error: error)
+                    print("Offline Store download failed.")
+                    completionHandler(.noData)
+                } else {
+                    self.logger.info("Offline Store is downloaded.")
+                    print("Offline Store is downloaded.")
+                    self.setRootViewController(isBackground: false)
+                    completionHandler(.newData)
+                }
             }
         }
+    }
+    
+    @available(iOS 13.0, *)
+    private func registerBackgroundTaks() {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.sap.ferrero.solman.download", using: nil) { task in
+            self.handleDownloadOfflineStore(task: task as! BGProcessingTask)
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    func handleDownloadOfflineStore(task: BGProcessingTask) {
+        scheduleAppRefresh()
+        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+            self.zrequestforchangesrvEntities.download { error in
+                if let error = error {
+                    self.logger.error("Offline Store download failed.", error: error)
+                    print("Offline Store download failed.")
+                    task.setTaskCompleted(success: false)
+                } else {
+                    self.logger.info("Offline Store is downloaded.")
+                    print("Offline Store is downloaded.")
+                    self.setRootViewController(isBackground: true)
+                    task.setTaskCompleted(success: true)
+                }
+            }
+        }
+    }
+    
+    func scheduleAppRefresh() {
+        if #available(iOS 13.0, *) {
+            let request = BGProcessingTaskRequest(identifier: "com.sap.ferrero.solman.download")
+            request.requiresNetworkConnectivity = true
+            request.requiresExternalPower = false
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60)
+            
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+                print("Could not schedule app refresh: \(error)")
+            }        }
+    }
+    
+    
+    
+    @available(iOS 13.0, *)
+    func cancelAllPendingBGTask() {
+        BGTaskScheduler.shared.cancelAllTaskRequests()
     }
     
     // To only support portrait orientation during onboarding
@@ -82,6 +138,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     // Delegate to OnboardingManager.
     func applicationDidEnterBackground(_: UIApplication) {
         OnboardingManager.shared.applicationDidEnterBackground()
+        if #available(iOS 13.0, *) {
+            cancelAllPendingBGTask()
+            scheduleAppRefresh()
+        }
         //self.closeOfflineStore()
     }
     
@@ -281,22 +341,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             return
         }
         print("passo 7")
+        //  self.avoid401Error()
         // the download function updates the client’s offline store from the backend.
-        self.zrequestforchangesrvEntities.download { error in
-            if let error = error {
-                self.logger.error("Offline Store download failed.", error: error)
-                print("Offline Store download failed.")
-                if (ConnectivityUtils.isConnected()){
-                    DispatchQueue.main.async {
-                        FUIToastMessage.show(message: "Offline Store download failed:\nInternal server error.",icon: FUIIconLibrary.indicator.veryHighPriority,withDuration: 2.5, maxNumberOfLines: 3)
+        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+            self.zrequestforchangesrvEntities.download { error in
+                if let error = error {
+                    self.logger.error("Offline Store download failed.", error: error)
+                    print("Offline Store download failed.")
+                    if (ConnectivityUtils.isConnected()){
+                        DispatchQueue.main.async {
+                            FUIToastMessage.show(message: "Offline Store download failed:\nInternal server error.",icon: FUIIconLibrary.indicator.veryHighPriority,withDuration: 2.5, maxNumberOfLines: 3)
+                        }
                     }
+                    
+                } else {
+                    self.logger.info("Offline Store is downloaded.")
+                    print("Offline Store is downloaded.")
                 }
-                
-            } else {
-                self.logger.info("Offline Store is downloaded.")
-                print("Offline Store is downloaded.")
+                self.setRootViewController(isBackground: isBackground)
             }
-            self.setRootViewController(isBackground: isBackground)
         }
     }
     

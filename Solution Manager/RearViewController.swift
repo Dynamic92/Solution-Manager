@@ -130,7 +130,6 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         
         sapURLSession?.dataTask(with: logoutRequest){data, response, error in
             if error == nil {
-                print("eccomiiiii")
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = 0
                     UserDefaults.standard.removeObject(forKey: "USER")

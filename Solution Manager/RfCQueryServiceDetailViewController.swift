@@ -94,10 +94,10 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
     func executeQuery(_ queryInput: DataQuery, _ message: String, _ queryString: [String]){
         DispatchQueue.global().async {
             do{
-                if (ConnectivityUtils.isConnected()){
+               if (ConnectivityUtils.isConnected()){
                     try
                         self.appDelegate.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: queryInput)
-                } else{
+               } else{
                     var queryArray = self.defaults.object(forKey: "QueryInputArray") as? [[String]]
                     if (queryArray != nil){
                         queryArray?.append(queryString)
@@ -111,30 +111,38 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
             }
             catch{
                 print(error)
+                self.undoPendingChanges()
                 return
             }
         }
-        
-        do{
-            if (message.contains("RFC has been approved.")){
-                self.entity.status = "E0004"
-            }
-                
-            else{
-                self.entity.status = "E0003"
-            }
-            
-            try self.appDelegate.zrequestforchangesrvEntities.updateEntity(self.entity)
-            //try self.appDelegate.zrequestforchangesrvEntities.deleteEntity(self.entity)
-            self.showToast(message)
+        self.showToast(message)
+    }
+    
+    func undoPendingChanges(){
+        do {
+            try self.appDelegate.zrequestforchangesrvEntities.undoPendingChanges(for: self.entity)
         }
-        catch{
+        catch {
             print(error)
+            return
         }
     }
     
     func showToast(_ message: String){
-        FUIToastMessage.show(message: NSLocalizedString("keyUpdateEntityFinishedTitle", value: message, comment: "XTIT: Title of alert message about successful action performed."))
+        if (message.contains("RFC has been approved.")){
+            self.entity.status = "E0004"
+        }
+        else{
+            self.entity.status = "E0003"
+        }
+        do {
+            try self.appDelegate.zrequestforchangesrvEntities.updateEntity(self.entity)
+            FUIToastMessage.show(message: NSLocalizedString("keyUpdateEntityFinishedTitle", value: message, comment: "XTIT: Title of alert message about successful action performed."))
+        }
+        catch {
+            print(error)
+            return
+        }
     }
     
     
