@@ -354,24 +354,28 @@ class RFCProcessedDetailViewController: FUIFormTableViewController, SAPFioriLoad
      }*/
     
     func setRequestForChange(_ requestForChange: RfCQueryService) {
-        
         self.entity = requestForChange
         self.objectHeader.headlineText = requestForChange.description
+        self.objectHeader.backgroundColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
         self.objectHeader.subheadlineText = "Created by: " + requestForChange.createdBy!
+        self.objectHeader.subheadlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        self.objectHeader.headlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        let tag = FUITag()
+        tag.textColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
+        tag.fillColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        tag.borderColor = UIColor.preferredFioriColor(forStyle: .primary6)
         if ((self.entity.status?.contains("E0003"))!){
-            self.objectHeader.tags = ["Rejected"].map({
-                FUITag(title: $0)
-            })
+            tag.text = "Rejected"
         }
         else {
-            self.objectHeader.tags = ["Approved"].map({
-                FUITag(title: $0)
-            })
+            tag.text = "Approved"
+            
         }
-        
-        //self.objectHeader.color
+        self.objectHeader.tags = [tag]
         self.objectHeader.bodyText = "Object ID: " + requestForChange.objectID!
+        self.objectHeader.bodyLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
         self.objectHeader.footnoteText = "Created at: " + (requestForChange.createdAt?.date.toString())! + ", " + (requestForChange.createdAt?.time.toString())!
+        self.objectHeader.footnoteLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
     }
     
     // MARK: - OData property specific cell creators

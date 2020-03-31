@@ -69,7 +69,7 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
     private func setKPIHeader() {
         let kpiHeader = FUIKPIHeader()
         var kpiItems = [FUIKPIContainer]()
-        
+        kpiHeader.backgroundColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
         for index in 0...2 {
             kpiItems.append(kpiExampleData[index])
         }
@@ -148,17 +148,18 @@ class RFCProcessedMasterViewController: FUIFormTableViewController, SAPFioriLoad
         let image3 = UIImage(named:"Proposed")
         let kpiView1 = buildKPIView(items: [FUIKPIIconItem(icon: image1!.tinted(with: UIColor.preferredFioriColor(forStyle: .primary6))!),FUIKPIMetricItem(string: String(UserDefaults.standard.integer(forKey: "tobeapprovedcount")))],
                                     captionLabelText: "Pending",
-                                    colorScheme: .dark,
+                                    colorScheme: .darkConstant,
                                     isEnabled: true)
         
         let kpiView2 = buildKPIView(items: [FUIKPIIconItem(icon: image2!.tinted(with: UIColor.preferredFioriColor(forStyle: .primary6))!), FUIKPIMetricItem(string: String(UserDefaults.standard.integer(forKey: "rejectedcount")))],
                                     captionLabelText: "Rejected",
-                                    colorScheme: .dark,
+                                    colorScheme: .darkConstant,
                                     isEnabled: true)
+        
         
         let kpiView3 = buildKPIView(items: [FUIKPIIconItem(icon: image3!.tinted(with: UIColor.preferredFioriColor(forStyle: .primary6))!), FUIKPIMetricItem(string: String(UserDefaults.standard.integer(forKey: "approvedcount")))],
                                     captionLabelText: "Approved",
-                                    colorScheme: .dark,
+                                    colorScheme: .darkConstant,
                                     isEnabled: true)
         kpiExampleData = [kpiView1, kpiView2, kpiView3]
         if (self.entities.count==0) {

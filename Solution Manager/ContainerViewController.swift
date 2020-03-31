@@ -43,7 +43,7 @@ class ContainerViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    func setUpNotifications(){
+    func setUpNotifications() {
         let notificationOpenOrCloseSideMenu = Notification.Name("notificationOpenOrCloseSideMenu")
         NotificationCenter.default.addObserver(self, selector: #selector(openOrCloseSideMenu), name: notificationOpenOrCloseSideMenu, object: nil)
         

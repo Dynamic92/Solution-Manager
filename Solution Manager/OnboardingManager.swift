@@ -60,7 +60,7 @@ class OnboardingManager {
     private func configuredOAuth2AuthenticationStep(needsServerValidation: Bool) -> OAuth2AuthenticationStep {
         let presenter = FioriWKWebViewPresenter(webViewDelegate: self)
         let oAuth2AuthenticationStep = OAuth2AuthenticationStep(presenter: presenter)
-        oAuth2AuthenticationStep.sendsValidationRequest = needsServerValidation
+        //oAuth2AuthenticationStep.sendsValidationRequest = needsServerValidation
         return oAuth2AuthenticationStep
     }
     
@@ -90,12 +90,12 @@ class OnboardingManager {
     /// - Note: Should be called when the application screen is already hidden,
     /// for example after `onboardOrRestore` has already been called, like in case of reseting.
     private func onboardOrRestoreWithoutSplashScreen() {
-        let settingsParameters = SAPcpmsSettingsParameters(backendURL: URL(string: "https://mobile-lca560d580.hana.ondemand.com/")!, applicationID: "com.ferrero.sap.SolutionManager")
-        let oAuth2Parameters = OAuth2AuthenticationParameters(authorizationEndpointURL: URL(string: "https://oauthasservices-lca560d580.hana.ondemand.com/oauth2/api/v1/authorize")!, clientID: "3aab6ab2-489b-4eaa-9637-f4e5319d5b97", redirectURL: URL(string: "https://oauthasservices-lca560d580.hana.ondemand.com")!, tokenEndpointURL: URL(string:"https://oauthasservices-lca560d580.hana.ondemand.com/oauth2/api/v1/token")!)
+        let settingsParameters = SAPcpmsSettingsParameters(backendURL: URL(string: "https://mobile-s354bfe2f3.hana.ondemand.com/")!, applicationID: "com.ferrero.sap.SolutionManager")
+        let oAuth2Parameters = OAuth2AuthenticationParameters(authorizationEndpointURL: URL(string: "https://oauthasservices-s354bfe2f3.hana.ondemand.com/oauth2/api/v1/authorize")!, clientID: "3aab6ab2-489b-4eaa-9637-f4e5319d5b97", redirectURL: URL(string: "https://oauthasservices-lca560d580.hana.ondemand.com")!, tokenEndpointURL: URL(string:"https://oauthasservices-s354bfe2f3.hana.ondemand.com/oauth2/api/v1/token")!)
         self.state = .onboarding
         var context = OnboardingContext(presentationDelegate: presentationDelegate)
         context.info[.sapcpmsSettingsParameters] = settingsParameters
-        context.info[.authenticationURL] = URL(string: "https://mobile-lca560d580.hana.ondemand.com/com.ferrero.sap.SolutionManager")
+        context.info[.authenticationURL] = URL(string: "https://mobile-s354bfe2f3.hana.ondemand.com/com.ferrero.sap.SolutionManager")
         context.info[.oauth2AuthenticationParameters] = oAuth2Parameters
         
         // Check if we have an existing onboardingID

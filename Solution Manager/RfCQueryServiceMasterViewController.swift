@@ -76,6 +76,7 @@ class RfCQueryServiceMasterViewController: FUIFormTableViewController, SAPFioriL
             kpiItems.append(kpiExampleData[index])
         }
         kpiHeader.items = kpiItems
+        kpiHeader.backgroundColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
         tableView.tableHeaderView = kpiHeader
     }
     

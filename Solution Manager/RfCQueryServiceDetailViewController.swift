@@ -408,15 +408,21 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func setRequestForChange(_ requestForChange: RfCQueryService) {
-        
+        let tag = FUITag(title: "To be Approved")
+        tag.textColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
+        tag.fillColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        tag.borderColor = UIColor.preferredFioriColor(forStyle: .primary6)
         self.entity = requestForChange
+        self.objectHeader.backgroundColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
         self.objectHeader.headlineText = requestForChange.description
+        self.objectHeader.headlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
         self.objectHeader.subheadlineText = "Created by: " + requestForChange.createdBy!
-        self.objectHeader.tags = ["To be Approved"].map({
-            FUITag(title: $0)
-        })
+        self.objectHeader.subheadlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
+        self.objectHeader.tags = [tag]
         self.objectHeader.bodyText = "Object ID: " + requestForChange.objectID!
+        self.objectHeader.bodyLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
         self.objectHeader.footnoteText = "Created at: " + (requestForChange.createdAt?.date.toString())! + ", " + (requestForChange.createdAt?.time.toString())!
+        self.objectHeader.footnoteLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
     }
     
     

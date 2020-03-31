@@ -24,7 +24,10 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     var loadingIndicator: FUILoadingIndicatorView?
     let version = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.appVersionKey)
     let build = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.buildKey)
-    let environment = "Development"
+    let environment = "Quality"
+    private var zrequestforchangesrvEntities: ZREQUESTFORCHANGESRVEntities<OfflineODataProvider> {
+        return self.appDelegate.zrequestforchangesrvEntities
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +77,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         case 3:
             let titleCell = tableView.dequeueReusableCell(withIdentifier: FUITitleFormCell.reuseIdentifier, for: indexPath) as! FUITitleFormCell
             titleCell.value = "       Support"
+            titleCell.valueTextField.isEnabled = false
             titleCell.imageView?.image = UIImage(named: "email")
             titleCell.selectionStyle = .blue
             titleCell.accessoryType = .disclosureIndicator
@@ -84,6 +88,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
             let titleCell = tableView.dequeueReusableCell(withIdentifier: FUITitleFormCell.reuseIdentifier, for: indexPath) as! FUITitleFormCell
             titleCell.selectionStyle = .blue
             titleCell.value = "       Logout"
+            titleCell.valueTextField.isEnabled = false
             titleCell.imageView?.image = UIImage(named: "exit")
             titleCell.isEditable = false
             return titleCell
@@ -111,7 +116,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         )
         let confirmAction = UIAlertAction(
         title: "Ok", style: UIAlertAction.Style.default) { (action) in
-            self.logoutAction()
+              self.logoutAction()
         }
         let cancelAction = UIAlertAction(
         title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
@@ -123,30 +128,25 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     }
     
     func logoutAction(){
-        let sapURLSession = OnboardingManager.shared.sapURLSession
-        let logoutURL = URL(string: "https://mobile-lca560d580.hana.ondemand.com/mobileservices/sessions/logout")!
-        var logoutRequest = URLRequest(url: logoutURL)
-        logoutRequest.httpMethod = SAPURLSession.HTTPMethod.post
-        
-        sapURLSession?.dataTask(with: logoutRequest){data, response, error in
-            if error == nil {
-                DispatchQueue.main.async {
-                    UIApplication.shared.applicationIconBadgeNumber = 0
-                    UserDefaults.standard.removeObject(forKey: "USER")
-                    UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
-                    UserDefaults.standard.removeObject(forKey: "EMAIL")
-                    UserDefaults.standard.removeObject(forKey: "approvedcount")
-                    UserDefaults.standard.removeObject(forKey: "rejectedcount")
-                    UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
-                    UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
-                    UserDefaults.standard.synchronize()
-                    self.appDelegate.closeOfflineStore()
-                    URLCache.shared.removeAllCachedResponses()
-                    HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-                    OnboardingManager.shared.onboardOrRestore()
-                }
-            }
-        }.resume()
+       do{
+           try zrequestforchangesrvEntities.provider.clear()
+       }
+       catch {
+           print("error")
+       }
+       UIApplication.shared.applicationIconBadgeNumber = 0
+       UserDefaults.standard.removeObject(forKey: "USER")
+       UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
+       UserDefaults.standard.removeObject(forKey: "EMAIL")
+       UserDefaults.standard.removeObject(forKey: "approvedcount")
+       UserDefaults.standard.removeObject(forKey: "rejectedcount")
+       UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
+       UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
+       UserDefaults.standard.synchronize()
+       self.appDelegate.closeOfflineStore()
+       URLCache.shared.removeAllCachedResponses()
+       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+       OnboardingManager.shared.onboardOrRestore()
     }
     
     func sendEmail(){
@@ -181,11 +181,13 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         // Profile Header
         profileHeader = FUIProfileHeader()
         profileHeader.imageView.image = UIImage(named: "profile")
-        
+        profileHeader.backgroundColor = UIColor.preferredFioriColor(forStyle: .navigationBar)
         profileHeader.headlineText = UserDefaults.standard.string(forKey: "NAMESURNAME")!
+        profileHeader.headlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
         profileHeader.subheadlineText = UserDefaults.standard.string(forKey: "USER")!
+        profileHeader.subheadlineLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
         profileHeader.descriptionText = (UserDefaults.standard.string(forKey: "EMAIL") ?? "")
+        profileHeader.descriptionLabel.textColor = UIColor.preferredFioriColor(forStyle: .primary6)
     }
-    
     
 }

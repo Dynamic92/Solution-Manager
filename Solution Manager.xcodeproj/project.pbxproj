@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,21 +27,21 @@
 		A31FF7E823731DFE0043BF7C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A31FF7E723731DFE0043BF7C /* Settings.bundle */; };
 		A378B51823842A7A00833BC2 /* SearchBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A378B51723842A7A00833BC2 /* SearchBarContainerView.swift */; };
 		A388F40622CB4FD400BB5E16 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388F40522CB4FD400BB5E16 /* SettingsBundleHelper.swift */; };
+		A3BC2BE924126B1C00DA639A /* SAPFiori.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE624126B1C00DA639A /* SAPFiori.xcframework */; };
+		A3BC2BEA24126B1C00DA639A /* SAPFiori.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE624126B1C00DA639A /* SAPFiori.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A3BC2BEB24126B1C00DA639A /* SAPCommon.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE724126B1C00DA639A /* SAPCommon.xcframework */; };
+		A3BC2BEC24126B1C00DA639A /* SAPCommon.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE724126B1C00DA639A /* SAPCommon.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A3BC2BED24126B1C00DA639A /* SAPFioriFlows.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE824126B1C00DA639A /* SAPFioriFlows.xcframework */; };
+		A3BC2BEE24126B1C00DA639A /* SAPFioriFlows.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BE824126B1C00DA639A /* SAPFioriFlows.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A3BC2BF024126B3200DA639A /* SAPFoundation.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BEF24126B3200DA639A /* SAPFoundation.xcframework */; };
+		A3BC2BF124126B3200DA639A /* SAPFoundation.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BEF24126B3200DA639A /* SAPFoundation.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A3BC2BF424126B3F00DA639A /* SAPOData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BF224126B3E00DA639A /* SAPOData.xcframework */; };
+		A3BC2BF524126B3F00DA639A /* SAPOData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BF224126B3E00DA639A /* SAPOData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A3BC2BF624126B3F00DA639A /* SAPOfflineOData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BF324126B3F00DA639A /* SAPOfflineOData.xcframework */; };
+		A3BC2BF724126B3F00DA639A /* SAPOfflineOData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC2BF324126B3F00DA639A /* SAPOfflineOData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A3C9920622819AE00033A896 /* RfCQueryServiceMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C9920522819AE00033A896 /* RfCQueryServiceMasterViewController.swift */; };
 		A3C9920B22819B0D0033A896 /* RFCProcessedMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C9920A22819B0D0033A896 /* RFCProcessedMasterViewController.swift */; };
 		A3C992112281A7C70033A896 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3C992102281A7C70033A896 /* Assets.xcassets */; };
-		A3CBFC322375C5BC0008DC04 /* SAPFiori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC2F2375C5BC0008DC04 /* SAPFiori.framework */; };
-		A3CBFC332375C5BC0008DC04 /* SAPFiori.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC2F2375C5BC0008DC04 /* SAPFiori.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3CBFC342375C5BC0008DC04 /* SAPFioriFlows.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC302375C5BC0008DC04 /* SAPFioriFlows.framework */; };
-		A3CBFC352375C5BC0008DC04 /* SAPFioriFlows.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC302375C5BC0008DC04 /* SAPFioriFlows.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3CBFC362375C5BC0008DC04 /* SAPCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC312375C5BC0008DC04 /* SAPCommon.framework */; };
-		A3CBFC372375C5BC0008DC04 /* SAPCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC312375C5BC0008DC04 /* SAPCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3CBFC392375C5C60008DC04 /* SAPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC382375C5C60008DC04 /* SAPFoundation.framework */; };
-		A3CBFC3A2375C5C60008DC04 /* SAPFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC382375C5C60008DC04 /* SAPFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3CBFC3D2375C5CF0008DC04 /* SAPOData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC3B2375C5CE0008DC04 /* SAPOData.framework */; };
-		A3CBFC3E2375C5CF0008DC04 /* SAPOData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC3B2375C5CE0008DC04 /* SAPOData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3CBFC3F2375C5CF0008DC04 /* SAPOfflineOData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC3C2375C5CE0008DC04 /* SAPOfflineOData.framework */; };
-		A3CBFC402375C5CF0008DC04 /* SAPOfflineOData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3CBFC3C2375C5CE0008DC04 /* SAPOfflineOData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A3DD68E6234236CE008C240C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DD68E5234236CE008C240C /* ContainerViewController.swift */; };
 		A3DD68E8234237BB008C240C /* RearViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DD68E7234237BB008C240C /* RearViewController.swift */; };
 		A3E7AEDE237AD3F200B95A4D /* RFCProcessedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7AEDD237AD3F200B95A4D /* RFCProcessedDetailViewController.swift */; };
@@ -59,12 +59,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A3CBFC332375C5BC0008DC04 /* SAPFiori.framework in Embed Frameworks */,
-				A3CBFC372375C5BC0008DC04 /* SAPCommon.framework in Embed Frameworks */,
-				A3CBFC3E2375C5CF0008DC04 /* SAPOData.framework in Embed Frameworks */,
-				A3CBFC3A2375C5C60008DC04 /* SAPFoundation.framework in Embed Frameworks */,
-				A3CBFC352375C5BC0008DC04 /* SAPFioriFlows.framework in Embed Frameworks */,
-				A3CBFC402375C5CF0008DC04 /* SAPOfflineOData.framework in Embed Frameworks */,
+				A3BC2BEE24126B1C00DA639A /* SAPFioriFlows.xcframework in Embed Frameworks */,
+				A3BC2BEA24126B1C00DA639A /* SAPFiori.xcframework in Embed Frameworks */,
+				A3BC2BF724126B3F00DA639A /* SAPOfflineOData.xcframework in Embed Frameworks */,
+				A3BC2BEC24126B1C00DA639A /* SAPCommon.xcframework in Embed Frameworks */,
+				A3BC2BF124126B3200DA639A /* SAPFoundation.xcframework in Embed Frameworks */,
+				A3BC2BF524126B3F00DA639A /* SAPOData.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,15 +92,15 @@
 		A31FF7E723731DFE0043BF7C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A378B51723842A7A00833BC2 /* SearchBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarContainerView.swift; sourceTree = "<group>"; };
 		A388F40522CB4FD400BB5E16 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
+		A3BC2BE624126B1C00DA639A /* SAPFiori.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPFiori.xcframework; path = "Solution Manager/SAPFiori.xcframework"; sourceTree = "<group>"; };
+		A3BC2BE724126B1C00DA639A /* SAPCommon.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPCommon.xcframework; path = "Solution Manager/SAPCommon.xcframework"; sourceTree = "<group>"; };
+		A3BC2BE824126B1C00DA639A /* SAPFioriFlows.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPFioriFlows.xcframework; path = "Solution Manager/SAPFioriFlows.xcframework"; sourceTree = "<group>"; };
+		A3BC2BEF24126B3200DA639A /* SAPFoundation.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPFoundation.xcframework; path = "Solution Manager/SAPFoundation.xcframework"; sourceTree = "<group>"; };
+		A3BC2BF224126B3E00DA639A /* SAPOData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPOData.xcframework; path = "Solution Manager/SAPOData.xcframework"; sourceTree = "<group>"; };
+		A3BC2BF324126B3F00DA639A /* SAPOfflineOData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SAPOfflineOData.xcframework; path = "Solution Manager/SAPOfflineOData.xcframework"; sourceTree = "<group>"; };
 		A3C9920522819AE00033A896 /* RfCQueryServiceMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RfCQueryServiceMasterViewController.swift; sourceTree = "<group>"; };
 		A3C9920A22819B0D0033A896 /* RFCProcessedMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFCProcessedMasterViewController.swift; sourceTree = "<group>"; };
 		A3C992102281A7C70033A896 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A3CBFC2F2375C5BC0008DC04 /* SAPFiori.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPFiori.framework; path = "Solution Manager/SAPFiori.framework"; sourceTree = "<group>"; };
-		A3CBFC302375C5BC0008DC04 /* SAPFioriFlows.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPFioriFlows.framework; path = "Solution Manager/SAPFioriFlows.framework"; sourceTree = "<group>"; };
-		A3CBFC312375C5BC0008DC04 /* SAPCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPCommon.framework; path = "Solution Manager/SAPCommon.framework"; sourceTree = "<group>"; };
-		A3CBFC382375C5C60008DC04 /* SAPFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPFoundation.framework; path = "Solution Manager/SAPFoundation.framework"; sourceTree = "<group>"; };
-		A3CBFC3B2375C5CE0008DC04 /* SAPOData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPOData.framework; path = "Solution Manager/SAPOData.framework"; sourceTree = "<group>"; };
-		A3CBFC3C2375C5CE0008DC04 /* SAPOfflineOData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SAPOfflineOData.framework; path = "Solution Manager/SAPOfflineOData.framework"; sourceTree = "<group>"; };
 		A3DD68E5234236CE008C240C /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		A3DD68E7234237BB008C240C /* RearViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearViewController.swift; sourceTree = "<group>"; };
 		A3E7AEDD237AD3F200B95A4D /* RFCProcessedDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFCProcessedDetailViewController.swift; sourceTree = "<group>"; };
@@ -118,12 +118,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3CBFC322375C5BC0008DC04 /* SAPFiori.framework in Frameworks */,
-				A3CBFC362375C5BC0008DC04 /* SAPCommon.framework in Frameworks */,
-				A3CBFC3D2375C5CF0008DC04 /* SAPOData.framework in Frameworks */,
-				A3CBFC392375C5C60008DC04 /* SAPFoundation.framework in Frameworks */,
-				A3CBFC342375C5BC0008DC04 /* SAPFioriFlows.framework in Frameworks */,
-				A3CBFC3F2375C5CF0008DC04 /* SAPOfflineOData.framework in Frameworks */,
+				A3BC2BED24126B1C00DA639A /* SAPFioriFlows.xcframework in Frameworks */,
+				A3BC2BE924126B1C00DA639A /* SAPFiori.xcframework in Frameworks */,
+				A3BC2BF624126B3F00DA639A /* SAPOfflineOData.xcframework in Frameworks */,
+				A3BC2BEB24126B1C00DA639A /* SAPCommon.xcframework in Frameworks */,
+				A3BC2BF024126B3200DA639A /* SAPFoundation.xcframework in Frameworks */,
+				A3BC2BF424126B3F00DA639A /* SAPOData.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,12 +240,12 @@
 		7A1315CC1D4B990B00A5DA56 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A3CBFC3B2375C5CE0008DC04 /* SAPOData.framework */,
-				A3CBFC3C2375C5CE0008DC04 /* SAPOfflineOData.framework */,
-				A3CBFC382375C5C60008DC04 /* SAPFoundation.framework */,
-				A3CBFC312375C5BC0008DC04 /* SAPCommon.framework */,
-				A3CBFC2F2375C5BC0008DC04 /* SAPFiori.framework */,
-				A3CBFC302375C5BC0008DC04 /* SAPFioriFlows.framework */,
+				A3BC2BF224126B3E00DA639A /* SAPOData.xcframework */,
+				A3BC2BF324126B3F00DA639A /* SAPOfflineOData.xcframework */,
+				A3BC2BEF24126B3200DA639A /* SAPFoundation.xcframework */,
+				A3BC2BE724126B1C00DA639A /* SAPCommon.xcframework */,
+				A3BC2BE624126B1C00DA639A /* SAPFiori.xcframework */,
+				A3BC2BE824126B1C00DA639A /* SAPFioriFlows.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -445,7 +445,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -500,11 +500,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -571,8 +572,11 @@
 					"$(PROJECT_DIR)/Solution\\ Manager",
 				);
 				INFOPLIST_FILE = "Solution Manager/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sap.ferrero.solmanPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -641,8 +645,11 @@
 					"$(PROJECT_DIR)/Solution\\ Manager",
 				);
 				INFOPLIST_FILE = "Solution Manager/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sap.ferrero.solmanPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
