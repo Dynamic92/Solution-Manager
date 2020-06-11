@@ -24,7 +24,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     var loadingIndicator: FUILoadingIndicatorView?
     let version = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.appVersionKey)
     let build = UserDefaults.standard.string(forKey: SettingsBundleHelper.SettingsBundleKeys.buildKey)
-    let environment = "Quality"
+    let environment = "Production"
     private var zrequestforchangesrvEntities: ZREQUESTFORCHANGESRVEntities<OfflineODataProvider> {
         return self.appDelegate.zrequestforchangesrvEntities
     }
@@ -116,7 +116,7 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
         )
         let confirmAction = UIAlertAction(
         title: "Ok", style: UIAlertAction.Style.default) { (action) in
-              self.logoutAction()
+            self.logoutAction()
         }
         let cancelAction = UIAlertAction(
         title: "Cancel", style: UIAlertAction.Style.cancel) { (action) in
@@ -128,32 +128,50 @@ class RearViewController: UIViewController, SAPFioriLoadingIndicator, UITableVie
     }
     
     func logoutAction(){
-       do{
-           try zrequestforchangesrvEntities.provider.clear()
-       }
-       catch {
-           print("error")
-       }
-       UIApplication.shared.applicationIconBadgeNumber = 0
-       UserDefaults.standard.removeObject(forKey: "USER")
-       UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
-       UserDefaults.standard.removeObject(forKey: "EMAIL")
-       UserDefaults.standard.removeObject(forKey: "approvedcount")
-       UserDefaults.standard.removeObject(forKey: "rejectedcount")
-       UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
-       UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
-       UserDefaults.standard.synchronize()
-       self.appDelegate.closeOfflineStore()
-       URLCache.shared.removeAllCachedResponses()
-       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-       OnboardingManager.shared.onboardOrRestore()
+        let sapURLSession = OnboardingManager.shared.sapURLSession
+        let logoutURL = URL(string:"https://mobile-g9a84e0b47.hana.ondemand.com/mobileservices/sessions/logout")!
+        var logoutRequest = URLRequest(url: logoutURL)
+        logoutRequest.httpMethod = SAPURLSession.HTTPMethod.post
+        
+        let logoutTask = sapURLSession?.dataTask(with: logoutRequest){
+            data, response, error in
+            if (error == nil){
+                do{
+                    try self.zrequestforchangesrvEntities.provider.clear()
+                }
+                catch {
+                    print("error")
+                }
+                
+                UserDefaults.standard.removeObject(forKey: "USER")
+                UserDefaults.standard.removeObject(forKey: "NAMESURNAME")
+                UserDefaults.standard.removeObject(forKey: "EMAIL")
+                UserDefaults.standard.removeObject(forKey: "approvedcount")
+                UserDefaults.standard.removeObject(forKey: "rejectedcount")
+                UserDefaults.standard.removeObject(forKey: "tobeapprovedcount")
+                UserDefaults.standard.removeObject(forKey: "keyOnboardingID")
+                UserDefaults.standard.synchronize()
+                self.appDelegate.closeOfflineStore()
+                URLCache.shared.removeAllCachedResponses()
+                HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    OnboardingManager.shared.onboardOrRestore()
+                }
+            } else{
+                FUIToastMessage.show(message: "Something goes wrong with logout!")
+            }
+        }
+        logoutTask?.taskDescription = "SAPcpms logout request"
+        logoutTask?.resume()
     }
     
     func sendEmail(){
         let emailTo = "GSCMobileCompetenceCenter@ferrero.com"
-        let subjectFirstPart = "Problem%20on%20version%20" + version! + "%20in%20"
-        let subjectSecondPart = environment + "%20environment"
-        let subject = subjectFirstPart + subjectSecondPart
+        let subjectFirstPart = "Problem%20on%20version%20" + version! + "%20-%20build%20"
+        let subjectSecondPart = build! + "%20in%20"
+        let subjectThirdPart = environment + "%20environment"
+        let subject = subjectFirstPart + subjectSecondPart + subjectThirdPart
         let urlString = "ms-outlook://compose?to=" + emailTo + "&subject=" + subject
         print(urlString)
         

@@ -110,7 +110,6 @@ class RfCQueryServiceDetailViewController: UIViewController, UITableViewDelegate
                 }
             }
             catch{
-                print(error)
                 self.undoPendingChanges()
                 return
             }

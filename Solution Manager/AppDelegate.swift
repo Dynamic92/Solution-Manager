@@ -40,28 +40,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     private func registerBackgroundTasks() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.SM.apprefresh", using: nil) { task in
             //This task is cast with processing request (BGProcessingTask)
-            self.handleDownloadOfflineStore(task: task as! BGProcessingTask)
+            self.handleDownloadOfflineStore(task: task as! BGAppRefreshTask)
         }
     }
     
-    func handleDownloadOfflineStore(task: BGProcessingTask) {
-        print("Offline Store is downloaded.")
-        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
-            self.zrequestforchangesrvEntities.download { error in
-                if error != nil {
-                    task.setTaskCompleted(success: false)
-                } else {
+    func handleDownloadOfflineStore(task: BGAppRefreshTask) {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        queue.addOperation {
+            self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+                self.zrequestforchangesrvEntities.download {_ in
                     self.setRootViewController(isBackground: false)
-                    task.setTaskCompleted(success: true)
                 }
             }
         }
+        
+        task.expirationHandler = {
+            queue.cancelAllOperations()
+        }
+        
+        let lastOperation = queue.operations.last
+        lastOperation?.completionBlock = {
+            task.setTaskCompleted(success: !(lastOperation?.isCancelled ?? false))
+        }
+        
         scheduleStoreFetcher()
     }
     
     func scheduleStoreFetcher() {
         let request = BGAppRefreshTaskRequest(identifier: "com.SM.apprefresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 15*60)
         do {
             try BGTaskScheduler.shared.submit(request)
         } catch {
@@ -74,13 +82,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
-            self.zrequestforchangesrvEntities.download { error in
-                if error != nil {
-                    completionHandler(.noData)
-                } else {
-                    self.setRootViewController(isBackground: false)
-                    completionHandler(.newData)
+        if (UserDefaults.standard.string(forKey: "keyOnboardingID") != nil) {
+            self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
+                self.zrequestforchangesrvEntities.download { error in
+                    if error != nil {
+                        completionHandler(.noData)
+                    } else {
+                        self.setRootViewController(isBackground: false)
+                        completionHandler(.newData)
+                    }
                 }
             }
         }
@@ -100,12 +110,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func applicationDidEnterBackground(_: UIApplication) {
         //OnboardingManager.shared.applicationDidEnterBackground()
         cancelAllPandingBGTask()
-        scheduleStoreFetcher()
+        if (UserDefaults.standard.string(forKey: "keyOnboardingID") != nil) {
+            scheduleStoreFetcher()
+        }
     }
     
     // Delegate to OnboardingManager.
     func applicationWillEnterForeground(_: UIApplication) {
-        if (self.zrequestforchangesrvEntities != nil){
+        if (UserDefaults.standard.string(forKey: "keyOnboardingID") != nil) {
             self.openOfflineStore(onboarding: false, isBackground: true)
         }
     }
@@ -117,7 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func onboarded(onboardingContext: OnboardingContext, onboarding: Bool) {
         // Adjust this path so it can be called after authentication and returns an HTTP 200 code. This is used to validate the authentication was successful.
         SettingsBundleHelper.checkAndExecuteSettings()
-        let configurationURL = URL(string:"https://mobile-s354bfe2f3.hana.ondemand.com/com.ferrero.sap.SolutionManager")!
+        let configurationURL = URL(string:"https://mobile-g9a84e0b47.hana.ondemand.com/com.ferrero.sap.SolutionManager")!
         
         self.getUserInfo(onboardingContext, configurationURL, onboarding)
         
@@ -208,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let status = RfCQueryService.status
         let processType = RfCQueryService.processType
         let queryManager = DataQuery().selectAll().where(changeManager.equal(UserDefaults.standard.string(forKey: "USER")!).and(processType.equal("SMCR")).and(status.equal("E0003").or(status.equal("E0004").or(status.equal("E0012")))))
-        var offlineParameters = OfflineODataParameters()
+        let offlineParameters = OfflineODataParameters()
         offlineParameters.enableRepeatableRequests = true
         // Setup an instance of delegate. See sample code below for definition of OfflineODataDelegateSample class.
         let delegate = OfflineODataDelegateSample()
@@ -243,9 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     public func openOfflineStore(onboarding: Bool, isBackground: Bool) {
-        print("passo 1")
         if !self.isOfflineStoreOpened {
-            print("passo 2")
             // The OfflineODataProvider needs to be opened before performing any operations.
             self.zrequestforchangesrvEntities.open { error in
                 if let error = error {
@@ -253,20 +263,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     self.showOfflineODataError(error, message: "Could not open offline store")
                     return
                 }
-                print("passo 3")
                 self.isOfflineStoreOpened = true
                 self.logger.info("Offline store opened.")
                 if !onboarding {
-                    print("passo 4")
                     // You might want to consider doing the synchronization based on an explicit user interaction instead of automatically synchronizing during startup
                     self.performOfflineRefresh(isBackground: isBackground)
                 } else {
-                    print("passo 5")
                     self.setRootViewController(isBackground: isBackground)
                 }
             }
         } else if !onboarding {
-            print("passo 6")
             // You might want to consider doing the synchronization based on an explicit user interaction instead of automatically synchronizing during startup
             self.performOfflineRefresh(isBackground: isBackground)
         }
@@ -282,23 +288,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 self.logger.error("Offline Store closing failed.")
             }
         }
-        print("Offline Store closed.")
         self.logger.info("Offline Store closed.")
     }
     
     private func downloadOfflineStore(isBackground: Bool) {
         if !self.isOfflineStoreOpened {
             self.logger.error("Offline Store still closed")
-            print("Offline Store still closed")
             return
         }
-        print("passo 7")
         // the download function updates the client’s offline store from the backend.
         self.zrequestforchangesrvEntitiesOnline.fetchRfCApprove(matching: DataQuery().from(ZREQUESTFORCHANGESRVEntitiesMetadata.EntitySets.rfCQueryServiceSet)) {_,_ in
             self.zrequestforchangesrvEntities.download { error in
                 if let error = error {
                     self.logger.error("Offline Store download failed.", error: error)
-                    print("Offline Store download failed.")
                     if (ConnectivityUtils.isConnected()){
                         DispatchQueue.main.async {
                             FUIToastMessage.show(message: "Offline Store download failed:\nInternal server error.",icon: FUIIconLibrary.indicator.veryHighPriority,withDuration: 2.5, maxNumberOfLines: 3)
@@ -307,7 +309,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     
                 } else {
                     self.logger.info("Offline Store is downloaded.")
-                    print("Offline Store is downloaded.")
                 }
                 self.setRootViewController(isBackground: isBackground)
             }
@@ -317,27 +318,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     private func uploadOfflineStore() {
         if !self.isOfflineStoreOpened {
             self.logger.error("Offline Store still closed")
-            print("Offline Store still closed")
             return
         }
-        print("passo 5")
         // the upload function updates the backend from the client’s offline store.
         
         self.zrequestforchangesrvEntities.upload { error in
             if let error = error {
                 self.logger.error("Offline Store upload failed.", error: error)
-                print("Offline Store upload failed.")
                 return
             }
             self.logger.info("Offline Store is uploaded.")
-            print("Offline Store is uploaded.")
         }
-        print("passo 6")
     }
     
     func getUserInfo(_ onBoardingContext: OnboardingContext, _ serviceRoot: URL, _ onboarding: Bool) {
         let userLogged = UserDefaults.standard.string(forKey: "USER")
-        print("userLogging")
         if (userLogged == nil && ConnectivityUtils.isConnected()){
             let userRoles = SAPcpmsUserRoles(sapURLSession: onBoardingContext.sapURLSession, settingsParameters: onBoardingContext.info[.sapcpmsSettingsParameters] as! SAPcpmsSettingsParameters)
             userRoles.load{ userInfo, error in
@@ -364,9 +359,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func configureEntities(_ urlSession: SAPURLSession, _ serviceRoot: URL, _ onboarding: Bool){
         self.zrequestforchangesrvEntities = nil
         do {
-            var entities = [RfCQueryService]()
-            let changeManager = RfCQueryService.changeManager
-            let queryLimit = DataQuery().selectAll().where(changeManager.equal(UserDefaults.standard.string(forKey: "USER")!))
+            let queryLimit = DataQuery().selectAll().where(RfCQueryService.changeManager.equal(UserDefaults.standard.string(forKey: "USER")!))
             let odataProvider = OnlineODataProvider(serviceName: "ZREQUESTFORCHANGESRVEntities", serviceRoot: serviceRoot, sapURLSession: urlSession)
             odataProvider.serviceOptions.checkVersion = false
             
@@ -401,8 +394,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                         let keyApproveReject = RfCApprove.key(objectID: queryInput[0], processType: queryInput[1], operationType: queryInput[2])
                         let queryApproveReject = DataQuery().from(approveSet).withKey(keyApproveReject)
                         try self.zrequestforchangesrvEntitiesOnline!.fetchRfCApprove(matching: queryApproveReject)
-                        print(queryApproveReject)
-                        
                     }
                     let arraynull = [[String]]()
                     UserDefaults.standard.set(arraynull, forKey: "QueryInputArray")
